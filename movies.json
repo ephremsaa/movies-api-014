@@ -14,5 +14,85 @@
     "year": 1999,
     "rating": 8.7,
     "createdAt": "2023-10-27T10:05:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Interstellar",
+    "director": "Christopher Nolan",
+    "year": 2014,
+    "rating": 8.6,
+    "createdAt": "2023-10-27T10:10:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "The Dark Knight",
+    "director": "Christopher Nolan",
+    "year": 2008,
+    "rating": 9.0,
+    "createdAt": "2023-10-27T10:15:00.000Z"
+  },
+  {
+    "id": "5",
+    "title": "Avatar",
+    "director": "James Cameron",
+    "year": 2009,
+    "rating": 7.9,
+    "createdAt": "2023-10-27T10:20:00.000Z"
+  },
+  {
+    "id": "6",
+    "title": "Titanic",
+    "director": "James Cameron",
+    "year": 1997,
+    "rating": 7.8,
+    "createdAt": "2023-10-27T10:25:00.000Z"
+  },
+  {
+    "id": "7",
+    "title": "Avengers: Endgame",
+    "director": "Anthony Russo, Joe Russo",
+    "year": 2019,
+    "rating": 8.4,
+    "createdAt": "2023-10-27T10:30:00.000Z"
+  },
+  {
+    "id": "8",
+    "title": "Gladiator",
+    "director": "Ridley Scott",
+    "year": 2000,
+    "rating": 8.5,
+    "createdAt": "2023-10-27T10:35:00.000Z"
+  },
+  {
+    "id": "9",
+    "title": "Joker",
+    "director": "Todd Phillips",
+    "year": 2019,
+    "rating": 8.3,
+    "createdAt": "2023-10-27T10:40:00.000Z"
+  },
+  {
+    "id": "10",
+    "title": "Black Panther",
+    "director": "Ryan Coogler",
+    "year": 2018,
+    "rating": 7.3,
+    "createdAt": "2023-10-27T10:45:00.000Z"
+  },
+  {
+    "id": "11",
+    "title": "The Shawshank Redemption",
+    "director": "Frank Darabont",
+    "year": 1994,
+    "rating": 9.3,
+    "createdAt": "2023-10-27T10:50:00.000Z"
+  },
+  {
+    "id": "12",
+    "title": "Forrest Gump",
+    "director": "Robert Zemeckis",
+    "year": 1994,
+    "rating": 8.8,
+    "createdAt": "2023-10-27T10:55:00.000Z"
   }
 ]
