@@ -9,34 +9,31 @@ const {
     sendResponse 
 } = require('./utils');
 
-// Use a dynamic port (fallback to 5000 to avoid port 3000 conflicts)
+
 const PORT = process.env.PORT || 5000;
 
-// Regular expression to match UUIDs and numeric IDs in the route
 const ID_REGEX = /^\/movies\/([a-zA-Z0-9-]+)\/?$/;
 
 const server = http.createServer(async (req, res) => {
-    // Enable CORS preflight handling
+   
     if (req.method === 'OPTIONS') {
         return sendResponse(res, 204, null);
     }
 
-    // Parse the request URL to separate path and query parameters
+    
     const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-    const pathname = parsedUrl.pathname.replace(/\/+$/, ''); // normalize trailing slash
+    const pathname = parsedUrl.pathname.replace(/\/+$/, ''); 
     const method = req.method;
 
     console.log(`[${new Date().toISOString()}] ${method} ${pathname}`);
 
     try {
-        // ---------------------------------------------------------
-        // ROUTE: GET /movies
-        // ---------------------------------------------------------
+       
         if (pathname === '/movies' || pathname === '') {
             if (method === 'GET') {
                 let movies = await readData();
 
-                // Advanced Feature: Support simple query filtering (e.g. ?year=2010)
+                
                 const queryYear = parsedUrl.searchParams.get('year');
                 if (queryYear) {
                     movies = movies.filter(m => m.year === parseInt(queryYear, 10));
@@ -49,9 +46,7 @@ const server = http.createServer(async (req, res) => {
                 });
             }
 
-            // ---------------------------------------------------------
-            // ROUTE: POST /movies
-            // ---------------------------------------------------------
+           
             if (method === 'POST') {
                 let body;
                 try {
@@ -60,7 +55,7 @@ const server = http.createServer(async (req, res) => {
                     return sendResponse(res, 400, { status: 'error', message: err.message });
                 }
 
-                // Strict Validation
+                
                 const { isValid, error } = validateMovie(body, false);
                 if (!isValid) {
                     return sendResponse(res, 400, { status: 'fail', message: error });
@@ -83,13 +78,10 @@ const server = http.createServer(async (req, res) => {
                 return sendResponse(res, 201, { status: 'success', data: newMovie });
             }
 
-            // Method Not Allowed for /movies
+           
             return sendResponse(res, 405, { status: 'error', message: `Method ${method} not allowed on this endpoint` });
         }
 
-        // ---------------------------------------------------------
-        // ROUTE: GET | PUT | DELETE /movies/:id
-        // ---------------------------------------------------------
         const match = pathname.match(ID_REGEX);
         if (match) {
             const movieId = match[1];
@@ -100,12 +92,12 @@ const server = http.createServer(async (req, res) => {
                 return sendResponse(res, 404, { status: 'fail', message: `Movie with ID ${movieId} not found` });
             }
 
-            // GET /movies/:id
+           
             if (method === 'GET') {
                 return sendResponse(res, 200, { status: 'success', data: movies[movieIndex] });
             }
 
-            // PUT /movies/:id
+           
             if (method === 'PUT') {
                 let body;
                 try {
@@ -118,20 +110,20 @@ const server = http.createServer(async (req, res) => {
                     return sendResponse(res, 400, { status: 'fail', message: 'Request body cannot be empty' });
                 }
 
-                // Partial Validation (only validate fields provided)
+                
                 const { isValid, error } = validateMovie(body, true);
                 if (!isValid) {
                     return sendResponse(res, 400, { status: 'fail', message: error });
                 }
 
-                // Merge existing movie with new updates
+              
                 const updatedMovie = {
                     ...movies[movieIndex],
                     ...body,
                     updatedAt: new Date().toISOString()
                 };
 
-                // Type casting for safety
+             
                 if (updatedMovie.year) updatedMovie.year = Number(updatedMovie.year);
                 if (updatedMovie.rating) updatedMovie.rating = Number(updatedMovie.rating);
                 if (updatedMovie.title) updatedMovie.title = updatedMovie.title.trim();
@@ -143,27 +135,25 @@ const server = http.createServer(async (req, res) => {
                 return sendResponse(res, 200, { status: 'success', data: updatedMovie });
             }
 
-            // DELETE /movies/:id
+          
             if (method === 'DELETE') {
                 movies.splice(movieIndex, 1);
                 await writeData(movies);
                 return sendResponse(res, 200, { status: 'success', message: 'Movie successfully deleted' });
             }
 
-            // Method Not Allowed for /movies/:id
+           
             return sendResponse(res, 405, { status: 'error', message: `Method ${method} not allowed on this endpoint` });
         }
 
-        // ---------------------------------------------------------
-        // 404 FALLBACK
-        // ---------------------------------------------------------
+     
         return sendResponse(res, 404, { 
             status: 'error', 
             message: `Route ${pathname} not found on this server` 
         });
 
     } catch (error) {
-        // Global Error Handler
+     
         console.error('🔥 Server Error:', error);
         return sendResponse(res, 500, { 
             status: 'error', 
@@ -173,7 +163,7 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-// Graceful Shutdown
+
 const shutdown = () => {
     console.log('\nClosing HTTP server...');
     server.close(() => {
@@ -185,7 +175,7 @@ const shutdown = () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-// Auto-fallback port logic to guarantee the server starts
+
 const startServer = (port) => {
     server.listen(port, () => {
         console.log(`🚀 Server running on http://localhost:${port}`);
