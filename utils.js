@@ -4,25 +4,19 @@ const crypto = require('crypto');
 
 const dataFilePath = path.join(__dirname, 'movies.json');
 
-// ---------------------------------------------------------
-// File System Operations (Data Layer)
-// ---------------------------------------------------------
+turns {Promise<Array>} Parsed array of movies.
 
-/**
- * Reads data asynchronously from the JSON file.
- * @returns {Promise<Array>} Parsed array of movies.
- */
 const readData = () => {
     return new Promise((resolve, reject) => {
         fs.readFile(dataFilePath, 'utf8', (err, data) => {
             if (err) {
                 if (err.code === 'ENOENT') {
-                    return resolve([]); // File doesn't exist yet
+                    return resolve([]); 
                 }
                 return reject(err);
             }
             if (!data || data.trim() === '') {
-                return resolve([]); // Handle completely empty file gracefully
+                return resolve([]);
             }
             try {
                 resolve(JSON.parse(data));
@@ -33,11 +27,7 @@ const readData = () => {
     });
 };
 
-/**
- * Writes data asynchronously to the JSON file.
- * @param {Array} data - Array of movies to write.
- * @returns {Promise<void>}
- */
+
 const writeData = (data) => {
     return new Promise((resolve, reject) => {
         fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), 'utf8', (err) => {
@@ -47,23 +37,12 @@ const writeData = (data) => {
     });
 };
 
-// ---------------------------------------------------------
-// Helper Utilities
-// ---------------------------------------------------------
 
-/**
- * Generates a realistic, cryptographically secure unique ID (UUID v4).
- */
 const generateId = () => {
     return crypto.randomUUID();
 };
 
-/**
- * Validates a movie object payload.
- * @param {Object} movie - The movie payload.
- * @param {boolean} isPartial - If true, only validates provided fields (for PUT/PATCH).
- * @returns {Object} { isValid, error }
- */
+
 const validateMovie = (movie, isPartial = false) => {
     if (!movie || typeof movie !== 'object') {
         return { isValid: false, error: 'Invalid JSON payload. Expected an object.' };
@@ -96,7 +75,7 @@ const validateMovie = (movie, isPartial = false) => {
         }
     }
 
-    // Check for unexpected fields
+    
     const allowedFields = ['title', 'director', 'year', 'rating'];
     const extraFields = Object.keys(movie).filter(key => !allowedFields.includes(key));
     if (extraFields.length > 0) {
@@ -106,11 +85,7 @@ const validateMovie = (movie, isPartial = false) => {
     return { isValid: true, error: null };
 };
 
-/**
- * Parses the incoming request body asynchronously.
- * @param {import('http').IncomingMessage} req 
- * @returns {Promise<Object>}
- */
+
 const getRequestBody = (req) => {
     return new Promise((resolve, reject) => {
         let body = '';
@@ -129,11 +104,9 @@ const getRequestBody = (req) => {
     });
 };
 
-/**
- * Standardizes the HTTP JSON response and adds CORS headers.
- */
+
 const sendResponse = (res, statusCode, payload) => {
-    // Standard Headers (Realistic API includes CORS and caching prevention)
+   
     const headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
